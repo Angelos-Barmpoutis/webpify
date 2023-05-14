@@ -1,0 +1,21 @@
+{
+  "name": "webpify",
+  "version": "1.0.2",
+  "description": "Converts images to WebP format",
+  "main": "index.js",
+  "bin": {
+    "webpify": "./bin/webpify.js"
+  },
+  "keywords": [
+    "image",
+    "converter",
+    "webp"
+  ],
+  "author": "Angelos Barmpoutis",
+  "dependencies": {
+    "glob": "^7.1.7",
+    "sharp": "^0.28.3",
+    "webp-converter": "^2.3.0",
+    "yargs": "^17.0.1"
+  }
+}
