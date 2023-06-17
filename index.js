@@ -1,7 +1,5 @@
 const glob = require("glob");
-const sharp = require("sharp");
 const path = require("path");
-const { promisify } = require("util");
 const fs = require("fs");
 const { createWebp } = require("./utils");
 
@@ -18,30 +16,31 @@ const globPromise = (pattern, options) => {
   });
 };
 
-async function convertImagesToWebp(src, dest) {
+async function convertImagesToWebp(src, dest, quality) {
   try {
     const imageFiles = await globPromise(`${src}/*.{jpg,png,jpeg,webp}`);
     const webpFiles = [];
     for (const file of imageFiles) {
       const { ext, name } = path.parse(file);
+      const srcPath = `${src}${name}${ext}`;
+      const destPath = `${dest}${name}.webp`;
       if (ext === ".webp") {
         const destFilepath = path.join(dest, `${name}.webp`);
         await fs.promises.copyFile(file, destFilepath);
         webpFiles.push(destFilepath);
       } else {
-        const image = sharp(file);
-        const webpBuffer = await createWebp(image);
+        const webpBuffer = await createWebp(srcPath, destPath, quality);
         const webpFilepath = path.join(dest, `${name}.webp`);
 
         // Create the destination directory if it doesn't exist
         await fs.promises.mkdir(dest, { recursive: true });
-
-        await fs.promises.writeFile(webpFilepath, webpBuffer);
         webpFiles.push(webpFilepath);
       }
     }
     console.log(
-      `Successfully converted ${imageFiles.length} images to WebP format.`
+      `Successfully converted ${imageFiles.length} ${
+        imageFiles.length === 1 ? "image" : "images"
+      } to WebP.`
     );
   } catch (error) {
     console.error(error);
@@ -83,7 +82,9 @@ async function replaceImagesWithWebp(src, dest) {
     }
     if (foundMatches) {
       console.log(
-        `Successfully found and replaced ${replaceCount} non-WebP image references in ${replaceFiles.length} files.`
+        `Successfully found and replaced ${replaceCount} non-WebP image references in ${
+          replaceFiles.length
+        } ${replaceFiles.length === 1 ? "file" : "files"}.`
       );
     } else {
       console.log("No matching non-WebP image references found.");

@@ -19,6 +19,12 @@ const argv = yargs(process.argv.slice(2))
       describe: "Destination directory for converted images",
       type: "string",
     },
+    q: {
+      alias: "quality",
+      describe:
+        "The quality of the converted images. The default quality is 85. Specify a value between 1 and 100.",
+      type: "number",
+    },
     r: {
       alias: "replace",
       describe:
@@ -28,11 +34,13 @@ const argv = yargs(process.argv.slice(2))
   })
   .help("h")
   .alias("h", "help")
-  .epilogue("For more information, visit https://yourwebsite.com").argv;
+  .epilogue(
+    "For more information, visit https://www.npmjs.com/package/webpify"
+  ).argv;
 
-const { src, dest, replace } = argv;
+const { src, dest, replace, quality } = argv;
 
-convertImagesToWebp(src, dest)
+convertImagesToWebp(src, dest, quality)
   .then(() => {
     console.log(`Conversion complete\n`);
     if (replace) {

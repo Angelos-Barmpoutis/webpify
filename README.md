@@ -35,13 +35,14 @@ The package provides a command-line interface (CLI) to perform image conversion 
 To convert images to WebP format, use the following command:
 
 ```bash
-webpify --src <source_directory> --dest <destination_directory>
+webpify --src <source_directory> --dest <destination_directory> [-q <quality>]
 ```
 
 - `<source_directory>`: The directory containing the images to be converted.
 - `<destination_directory>`: The directory where the converted WebP images will be saved.
+- `<-q <quality>`: (optional): The quality of the converted images. The default quality is 85. Specify a value between 1 and 100.
 
-This command converts all images (JPEG, PNG, and GIF) in the source directory to WebP format and saves them in the destination directory.
+This command converts all images (JPEG, PNG, and GIF) in the source directory to WebP format and saves them in the destination directory with the specified quality.
 
 ### Image Reference Replacement
 
@@ -81,8 +82,7 @@ webpify --src src --dest images --replace
 
 Webpify relies on the following dependencies:
 
-- glob: ^7.1.7
-- sharp: ^0.28.3
+- glob: ^8.1.0
 - webp-converter: ^2.3.0
 - yargs: ^17.0.1
 
